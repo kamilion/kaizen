@@ -163,6 +163,7 @@ class User(Model, ModelMixer):
     def make(cls, email, input_pass):
         """
         Create a new user entry from an email address and password
+        Remodel itself has a create() call, we need a crypted password for it to store.
         @param email: The email address to register with RethinkDB
         @param input_pass: The password to register with RethinkDB
         @return: A User object instantiated from the requested email address, or None.
