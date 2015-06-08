@@ -236,6 +236,6 @@ class UserProfile(Model):
     belongs_to = ('User',)
 
 # Call this to populate the tables if they don't exist.
-#create_tables()
+create_tables()
 # Call this to populate the indexes if they don't exist.
-#create_indexes()
+create_indexes()
