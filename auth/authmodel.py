@@ -11,10 +11,6 @@ from flask.ext.login import LoginManager, UserMixin
 import scrypt
 import random
 
-# Hotp tokens are currently disabled due to pyotp and py3 not playing well.
-# pyotp imports
-#import pyotp
-
 # yubikey imports
 from yubico_client import Yubico
 from yubico_client.otp import OTP
@@ -31,6 +27,7 @@ remodel.connection.pool.configure(db=config.rdb['userdb'],  # This db holds the 
 from remodel.models import Model
 from remodel.utils import create_tables, create_indexes
 
+auth_debug = True
 
 login_manager = LoginManager()
 
@@ -109,31 +106,21 @@ class User(Model, ModelMixer):
         @param token: The token to check against a YubiCo OTP
         @return: True if the token was valid, or False if the operation could not complete.
         """
-        if self['auth_yubitoken'] is not None:
-            try:  # to verify the token against yubico servers
-                y = yubico.verify(token)
-            except:  # If it doesn't work, just return none.
-                y = None
-            # But if it did work, check against our stored token.
-            if y and OTP(token).device_id == self['auth_yubitoken'][0:12]:
-                return True
+        try:
+            if self['identity_yubico'] is not None:
+                try:  # to verify the token against yubico servers
+                    y = yubico.verify(token)
+                    if auth_debug: print("AUTHMODEL: CheckYubiToken: Yubico SUCCESS for token: {}".format(token))
+                except:  # If it doesn't work, just return none.
+                    y = None
+                    if auth_debug: print("AUTHMODEL: CheckYubiToken: Yubico FAILED for token: {}".format(token))
+                # But if it did work, check against our stored token.
+                if y and OTP(token).device_id == self['identity_yubico'][0:12]:
+                    return True
+        except KeyError:  # I really don't see how this could happen, but we'll check anyway.
+            if auth_debug: print("AUTHMODEL: CheckYubiToken: Missing identity_yubico for: {}".format(self['email']))
+            return False
         return False
-
-    # Hotp tokens are currently disabled due to pyotp and py3 not playing well.
-    #def check_hotptoken(self, token):
-    #    """
-    #    Check the token of a user entry from a provided HOTP token
-    #    @param token: The token to check against a HOTP timestamp secret
-    #    @return: True if the token was valid, or False if the operation could not complete.
-    #    """
-    #    if self['auth_hotptoken'] is not None:
-    #        try:
-    #            token = int(token)
-    #        except ValueError:
-    #            token = 0
-    #        if pyotp.TOTP(self['auth_hotptoken']).now() == token:
-    #            return True
-    #    return False
 
     def check_password(self, input_pass):
         """
@@ -146,10 +133,10 @@ class User(Model, ModelMixer):
                 self['password'].decode('hex'),  # By pulling the hexed password from the DB
                 input_pass.encode('ascii', 'ignore'),  # And passing in the password
                 0.5)  # Take half a second to do this.
-            print("AUTHMODEL: CheckPassword: SUCCESS InputPass: {}".format(input_pass))
+            if auth_debug: print("AUTHMODEL: CheckPassword: SUCCESS InputPass: {}".format(input_pass))
             return True  # We don't check our cookie above, but it matches.
         except scrypt.error:
-            print("AUTHMODEL: CheckPassword: FAILED InputPass: {}".format(input_pass))
+            if auth_debug: print("AUTHMODEL: CheckPassword: FAILED InputPass: {}".format(input_pass))
             return False  # Because you get 'password is incorrect' if it does not.
 
     def change_password(self, input_pass):
@@ -164,7 +151,7 @@ class User(Model, ModelMixer):
                 input_pass.encode('ascii', 'ignore'),  # Assure the password is ascii.
                 0.5  # How long should we take?
             ).encode('hex')  # Store the completed password as hex
-            print("AUTHMODEL: SetNewPassword: InputPass: {}".format(input_pass))
+            if auth_debug: print("AUTHMODEL: SetNewPassword: InputPass: {}".format(input_pass))
             self['password'] = new_password
             self.save()  # Aiee, better error checking here, return false if this fails.
             return True  # We don't check our cookie above, but it matches.
@@ -186,14 +173,14 @@ class User(Model, ModelMixer):
                 input_pass.encode('ascii', 'ignore'),  # Assure the password is ascii.
                 0.5  # How long should we take?
             ).encode('hex')  # Store the completed password as hex
-            print("AUTHMODEL: SetNewPassword: InputPass: {}".format(input_pass))
+            if auth_debug: print("AUTHMODEL: SetNewPassword: InputPass: {}".format(input_pass))
         except scrypt.error:
             return None  # Because you get 'password is incorrect' if it does not.
 
         try:  # To make the database entry with the crypted password
             the_new_user = User.create(email=email, password=new_password, 
                                            active=True, admin=False, superadmin=False)
-        except RqlRuntimeError:
+        except KeyError:
             return None
 
         return the_new_user  # We don't check our scrypt cookie above, but it matches.
@@ -212,9 +199,9 @@ class User(Model, ModelMixer):
         else:
             try:
                 theuser = User.get(email=email)
-                print('GOT A STANDARD USER')
+                if auth_debug: print('AUTHMODEL: GetUserFromEmail: {} found'.format(email))
                 return theuser
-            except RqlRuntimeError:
+            except KeyError:
                 return None
 
     # Convenience method
@@ -230,9 +217,10 @@ class User(Model, ModelMixer):
         else:
             try:
                 theuser = User.get(identity_yubico=yubitoken[0:12])
-                print('GOT THE YUBICO USER')
+                if auth_debug: print('AUTHMODEL: GetUserFromYubiToken: {} matches for user {}'.format(
+                                                                     yubitoken, theuser['email'])) 
                 return theuser
-            except RqlRuntimeError:
+            except KeyError:
                 return None
 
 
