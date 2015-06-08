@@ -1,5 +1,7 @@
 This Kaizen plugin deals with handling billing and transactions.
 
+NOTE: This readme is totally wrong -- update it once code is written. --NOTE
+
 There are several sub-plugins available, implimenting a standard STRIPE.JS style interface.
 
 This interface is based on passing a single integer containing the number of pennies to charge the customer.

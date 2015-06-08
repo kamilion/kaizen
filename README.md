@@ -5,8 +5,6 @@ This is a web framework based on the 'flask' python web microframework.
 
 http://flask.pocoo.org/
 
-It comes as an example website which can be customized to your use-case.
-
 It's currently based on top of Flask-Classy.
 
 https://pythonhosted.org/Flask-Classy/
@@ -18,6 +16,8 @@ http://www.rethinkdb.com/
 The RethinkDB Python driver is also required.
 
 This system is based on many modules. 
+
+It comes as an example website which can be customized to your use-case.
 
 You might be interested in the Tickets module.
 
