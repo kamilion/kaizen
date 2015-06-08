@@ -41,9 +41,10 @@ rdb = {
     'host': 'localhost',
     'port': 28015,
     'auth_key': '',
-    'userdb': 'kaizen_auth:users',
-    'ticketsdb': 'kaizen:tickets',
-    'pagedb': 'kaizen:pages'
+    'userdb': 'kaizen_auth',
+    'billingdb': 'kaizen',
+    'ticketsdb': 'kaizen',
+    'pagedb': 'kaizen'
 }
 
 ########################################################################################################################

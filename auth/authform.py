@@ -145,7 +145,7 @@ class RegisterForm(Form):
             flash('Email Address Exists', 'error')
             return False
 
-        user = User.create(self.email.data, self.password.data)
+        user = User.make(self.email.data, self.password.data)
 
         if user is not None:
             self.user = user
