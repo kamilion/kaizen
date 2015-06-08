@@ -33,17 +33,8 @@ from auth.authview import AuthView
 ## **EDIT ME**
 ########################################################################################################################
 
-# PagesView imports
-from pages.pagesview import PagesView
-
-# TicketsView imports
-from tickets.ticketsview import TicketsView
-
 # Import additional views here.
 
-# Demo imports
-from testviews.quotesview import QuotesView
-from testviews.duckyview import DuckyView
 
 ########################################################################################################################
 ## Core Object Definition
@@ -131,21 +122,5 @@ AuthView.register(flask_core)
 ## **EDIT ME**
 ########################################################################################################################
 
-# PagesView registration
-PagesView.register(flask_core)
-
-# TicketsView registration
-TicketsView.register(flask_core)
-
 # Register additional views here.
-
-
-########################################################################################################################
-## Registration of DEMONSTRATION Flask-Classy based views to the Core Object
-## **EDIT ME**
-########################################################################################################################
-
-# Demo registration
-QuotesView.register(flask_core)
-DuckyView.register(flask_core)
 

@@ -41,6 +41,7 @@
 	</div>
 	<div class="grid_4">
 	  <h3>contact us</h3>
+{#
 			<form id="form" action="{{ url_for('TicketsView:do_ticket') }}" method=post>
 					  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 					  {{ form.hidden_tag() }}
@@ -76,6 +77,7 @@
                                      </div>
 					  </div>
 					  </form>   
+#}
 	</div>
   </div>   
 </div>
