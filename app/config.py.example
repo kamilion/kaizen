@@ -41,11 +41,14 @@ rdb = {
     'host': 'localhost',
     'port': 28015,
     'auth_key': '',
-    'userdb': 'kaizen_auth',
+    'defaultdb': 'kaizen',
+    'userdb': 'kaizen',
     'billingdb': 'kaizen',
     'ticketsdb': 'kaizen',
     'pagedb': 'kaizen'
 }
+
+# Note, there is currently a bug with how remodel handles databases. Stick to one for now.
 
 ########################################################################################################################
 ## YubiCo Configuration Definitions

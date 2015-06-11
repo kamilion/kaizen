@@ -29,14 +29,6 @@ from auth.authmodel import login_manager
 from auth.authview import AuthView
 
 ########################################################################################################################
-## Imports of Flask-Classy based Views
-## **EDIT ME**
-########################################################################################################################
-
-# Import additional views here.
-
-
-########################################################################################################################
 ## Core Object Definition
 ########################################################################################################################
 
@@ -95,7 +87,7 @@ def rethink_db_open():
     try:
         g.rdb_conn = r.connect(host=config.rdb['host'], port=config.rdb['port'], auth_key=config.rdb['auth_key'])
     except RqlDriverError:
-        abort(503, "Database connection could be established.")
+        abort(503, "Database connection could not be established.")
 
 @flask_core.after_request
 def rethink_db_close(response):
@@ -123,4 +115,5 @@ AuthView.register(flask_core)
 ########################################################################################################################
 
 # Register additional views here.
-
+from tickets.ticketsview import TicketsView
+TicketsView.register(flask_core)
