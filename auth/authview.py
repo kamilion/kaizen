@@ -16,7 +16,7 @@ from flask.ext.classy import FlaskView, route
 # Flask-WTF imports
 from auth.authform import AuthForm, RegisterForm, PasswdForm, YubiAuthForm
 
-from app.config import allow_new_users
+from app.config import ALLOW_NEW_USERS
 
 ########################################################################################################################
 ## View Class
@@ -67,7 +67,7 @@ class AuthView(FlaskView):
         Display of a Flask-Login compatible Flask-WTF form for registering a new account.
         @return: A Jinja2 Template containing a registration form, or if registration is disabled, a static message.
         """
-        if not allow_new_users:
+        if not ALLOW_NEW_USERS:
             return render_template('auth/no_register.html')
         else:
             form = RegisterForm()
@@ -80,7 +80,7 @@ class AuthView(FlaskView):
         Processing of a Flask-Login compatible Flask-WTF form
         @return: A Jinja2 Template containing a registration form, or a redirect to the index or next page.
         """
-        if not allow_new_users:
+        if not ALLOW_NEW_USERS:
             return render_template('auth/no_register.html')
         else:
             form = RegisterForm()

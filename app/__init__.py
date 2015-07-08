@@ -34,9 +34,7 @@ from auth.authview import AuthView
 
 # Flask application configuration
 flask_core = Flask(__name__)
-flask_core.config.from_object(config)
-flask_core.debug = config.debug
-flask_core.secret_key = config.secret_key
+flask_core.config.from_pyfile('config.py')
 
 # Register the flask-uuid extension with the core object
 FlaskUUID(flask_core)
@@ -85,7 +83,7 @@ def rethink_db_open():
     Opens a RethinkDB Connection before every request.
     """
     try:
-        g.rdb_conn = r.connect(host=config.rdb['host'], port=config.rdb['port'], auth_key=config.rdb['auth_key'])
+        g.rdb_conn = r.connect(host=config.RDB['host'], port=config.RDB['port'], auth_key=config.RDB['auth_key'])
     except RqlDriverError:
         abort(503, "Database connection could not be established.")
 

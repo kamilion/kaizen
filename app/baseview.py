@@ -13,7 +13,7 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 # Flask-classy imports
 from flask.ext.classy import FlaskView, route
 
-from app.config import allow_new_users
+from app.config import ALLOW_NEW_USERS
 
 ########################################################################################################################
 ## View Class
@@ -22,7 +22,7 @@ class BaseView(FlaskView):
     route_base = '/'
 
     def index(self):
-        return render_template('baseplate/index.html', registration=allow_new_users)
+        return render_template('baseplate/index.html', registration=ALLOW_NEW_USERS)
 
     def home(self):
         return render_template('baseplate/home.html')

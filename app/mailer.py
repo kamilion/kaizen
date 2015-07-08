@@ -5,7 +5,7 @@ __author__ = 'Kamilion@gmail.com'
 ########################################################################################################################
 
 # Local site config imports
-from app.config import smtp
+from app.config import SMTP
 
 # SMTP library import
 import smtplib
@@ -20,11 +20,11 @@ from email.mime.text import MIMEText
 
 def send_email(emailtarget, msg):
     try:
-        mailserver = smtplib.SMTP(smtp['host'], smtp['port']) # Open a connection to the SMTP server.
+        mailserver = smtplib.SMTP(SMTP['host'], SMTP['port']) # Open a connection to the SMTP server.
     except socket.error:
         print("Something went wrong with the socket.")
 
-    if smtp['tls']: # Then try to connect to the server and open a TLS tunnel.
+    if SMTP['tls']: # Then try to connect to the server and open a TLS tunnel.
         tlsresponse = mailserver.ehlo() # Ask the server what it supports, save the result.
         print('Asking server if it supports TLS:\n{}'.format(tlsresponse)) # do something better here.
         try: # to start a TLS tunnel
@@ -35,12 +35,12 @@ def send_email(emailtarget, msg):
     mailserver.ehlo() # Ask the server what it supports, preferably over the TLS tunnel.
 
     try: # to log in to the server
-        mailserver.login(smtp['username'], smtp['password']) # username format for exchange: 'domain\username'
+        mailserver.login(SMTP['username'], SMTP['password']) # username format for exchange: 'domain\username'
     except smtplib.SMTPAuthenticationError:
-        print("Couldn't authenticate with server using username {}.".format(smtp['username']))
+        print("Couldn't authenticate with server using username {}.".format(SMTP['username']))
 
     try: # to send the message
-        mailserver.sendmail(smtp['replyto'], emailtarget, msg) # Send the message
+        mailserver.sendmail(SMTP['replyto'], emailtarget, msg) # Send the message
     except smtplib.SMTPDataError:
         print("Server refused to accept our message to {}.".format(emailtarget))
 
@@ -50,7 +50,7 @@ def bundle_email(emailtext, emailhtml, emailsubject, emailtarget):
     # Create message container - the correct MIME type is multipart/alternative.
     msg = MIMEMultipart('alternative')
     msg['Subject'] = emailsubject
-    msg['From'] = smtp['replyto']
+    msg['From'] = SMTP['replyto']
     msg['To'] = emailtarget
 
     # Record the MIME types of both parts - text/plain and text/html.

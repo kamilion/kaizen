@@ -20,7 +20,7 @@ import rethinkdb as r
 from rethinkdb.errors import RqlRuntimeError
 
 # rethink configuration
-from app.config import rdb
+from app.config import RDB
 # This Class uses database configuration:
 cdb = 'ticketsdb'
 
@@ -65,7 +65,7 @@ class TicketsView(FlaskView):
 
     @login_required
     def admin(self):
-        db = rdb[cdb].split(':')
+        db = RDB[cdb].split(':')
         selection = list(r.db(db[0]).table(db[1]).order_by(r.desc(lambda date: date['meta']['updated_at'])).run(g.rdb_conn))
         if selection is not None:
             print(selection)
@@ -75,7 +75,7 @@ class TicketsView(FlaskView):
 
     @login_required
     def get(self, uuid):
-        db = rdb[cdb].split(':')
+        db = RDB[cdb].split(':')
         selection = r.db(db[0]).table(db[1]).get(uuid).run(g.rdb_conn)
         if selection is not None:
             print(selection)

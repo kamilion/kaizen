@@ -5,26 +5,26 @@ __author__ = 'Kamilion@gmail.com'
 ########################################################################################################################
 
 # Open Registration?
-allow_new_users = False
+ALLOW_NEW_USERS = False
 
 ########################################################################################################################
 ## Flask Configuration Definitions
 ########################################################################################################################
 
 # CSRF protection
-secret_key = "homestarrunnerisawinner"
+SECRET_KEY = "homestarrunnerisawinner"
 
 # API Endpoint protection
-api_key = "yourheadasplode"
+API_KEY = "yourheadasplode"
 
 # Debugging?
-debug = True
+DEBUG = True
 
 ########################################################################################################################
 ## Mail Host Configuration Definitions
 ########################################################################################################################
 # smtplib config
-smtp = {
+SMTP = {
     'host': 'smtp.gmail.com',
     'port': 587,
     'tls': True,
@@ -37,7 +37,7 @@ smtp = {
 ## RethinkDB Configuration Definitions
 ########################################################################################################################
 # rethink config
-rdb = {
+RDB = {
     'host': 'localhost',
     'port': 28015,
     'auth_key': '',
@@ -54,7 +54,7 @@ rdb = {
 ## YubiCo Configuration Definitions
 ########################################################################################################################
 
-yubico_keys = {  # Used in authmodel.py
+YUBICO_KEYS = {  # Used in authmodel.py
     'client_id': '12345',
     'secret_key': 'thatsamazingitsthesamekeyiuseformyluggage'
 }
@@ -63,7 +63,7 @@ yubico_keys = {  # Used in authmodel.py
 ## Stripe Configuration Definitions
 ########################################################################################################################
 
-stripe_keys = {  # Used in billingmodel.py
+STRIPE_KEYS = {  # Used in billingmodel.py
     'secret_key': 'sk_test_JCpSUX6gOBRacHaVJDiCKTbi',
     'publishable_key': 'pk_test_LhrTHEeEDuDEaBiDeSpvbPM6'
 }

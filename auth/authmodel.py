@@ -16,12 +16,12 @@ from yubico_client import Yubico
 from yubico_client.otp import OTP
 from app import config
 
-yubico = Yubico(config.yubico_keys['client_id'], config.yubico_keys['secret_key'])
+yubico = Yubico(config.YUBICO_KEYS['client_id'], config.YUBICO_KEYS['secret_key'])
 
 # Import the remodel connection class so we can influence it's configuration, as we need to set the db and auth_key.
 import remodel.connection
-remodel.connection.pool.configure(db=config.rdb['userdb'],  # This db holds the 'users' table.
- host=config.rdb['host'], port=config.rdb['port'], auth_key=config.rdb['auth_key'])
+remodel.connection.pool.configure(db=config.RDB['userdb'],  # This db holds the 'users' table.
+ host=config.RDB['host'], port=config.RDB['port'], auth_key=config.RDB['auth_key'])
 
 # Import the actual Model superclass.
 from remodel.models import Model
@@ -186,7 +186,6 @@ class User(Model, ModelMixer):
 
         return the_new_user  # We don't check our scrypt cookie above, but it matches.
 
-
     # Convenience method
     @classmethod
     def get_user_from_email(cls, email):
@@ -224,10 +223,10 @@ class User(Model, ModelMixer):
             except KeyError:
                 return None
 
-
     def __repr__(self):
         return '<User {} Superadmin: {} Admin: {}>'.format(
             self['email'], self['superadmin'], self['admin'])
+
 
 class UserProfile(Model):
     """
