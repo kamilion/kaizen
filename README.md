@@ -11,6 +11,14 @@ Each class gets it's own imports and need not share with the rest of the applica
 
 https://pythonhosted.org/Flask-Classy/
 
+Flask-login is used to provide authentication.
+
+http://flask-login.readthedocs.org/en/latest/
+
+Flask-bouncer is used to provide authorization.
+
+http://pythonhosted.org/flask-bouncer/
+
 We use the Remodel ORM by @linkyndy to access RethinkDB's JSON store. Treat it like Peewee.
 
 https://github.com/linkyndy/remodel
